@@ -56,9 +56,32 @@ def main() -> int:
     rows = [header]
     for name, cards in records:
         rows.append([name] + [cards.get(k, args.missing) for k in keywords])
+    
+    # Calculate column widths
     widths = [max(len(r[i]) for r in rows) for i in range(len(header))]
+    
+    # Detect if each column is numeric
+    def is_numeric(s: str) -> bool:
+        s = s.strip()
+        try:
+            float(s)
+            return True
+        except ValueError:
+            return False
+    
+    is_numeric_col = []
+    for col_idx in range(len(header)):
+        numeric_count = sum(1 for row in rows[1:] if is_numeric(row[col_idx]))
+        is_numeric_col.append(numeric_count == len(rows) - 1 and len(rows) > 1)
+    
+    # Format and print rows
     for row in rows:
-        padded = [cell.ljust(widths[i]) for i, cell in enumerate(row)]
+        padded = []
+        for i, cell in enumerate(row):
+            if is_numeric_col[i]:
+                padded.append(cell.rjust(widths[i]))
+            else:
+                padded.append(cell.ljust(widths[i]))
         # strip trailing whitespace on last column
         padded[-1] = padded[-1].rstrip()
         print(sep.join(padded))

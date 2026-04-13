@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "modern-dfits"
+version = "0.1.0"
+description = "Modern Python replacement for ESO dfits/fitsort"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "Contributors" }
+]
+license = { text = "MIT" }
+dependencies = [
+  "astropy>=6.0"
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent"
+]
+
+[project.urls]
+Homepage = "https://github.com/your-org/modern-dfits"
+Repository = "https://github.com/your-org/modern-dfits"
+
+[project.scripts]
+dfits = "modern_dfits.cli_dfits:main"
+fitsort = "modern_dfits.cli_fitsort:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

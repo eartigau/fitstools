@@ -15,16 +15,38 @@ dfits *.fits | fitsort OBJECT DATE-OBS EXPTIME
 
 ## Install
 
-From a local clone:
+Requirements:
+
+- Python 3.10 or newer
+- `pip`
+
+Install directly from GitHub:
 
 ```bash
-pip install .
+python3 -m pip install git+https://github.com/eartigau/fitstools.git
 ```
 
-From GitHub:
+Install from a local clone:
 
 ```bash
-pip install git+https://github.com/your-org/modern-dfits.git
+git clone https://github.com/eartigau/fitstools.git
+cd fitstools
+python3 -m pip install .
+```
+
+For development, install in editable mode:
+
+```bash
+git clone https://github.com/eartigau/fitstools.git
+cd fitstools
+python3 -m pip install -e .
+```
+
+After installation, the `dfits` and `fitsort` commands should be available in your shell. You can verify that with:
+
+```bash
+dfits --help
+fitsort --help
 ```
 
 ## Usage

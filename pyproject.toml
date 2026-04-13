@@ -23,8 +23,8 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/your-org/modern-dfits"
-Repository = "https://github.com/your-org/modern-dfits"
+Homepage = "https://github.com/eartigau/fitstools"
+Repository = "https://github.com/eartigau/fitstools"
 
 [project.scripts]
 dfits = "modern_dfits.cli_dfits:main"

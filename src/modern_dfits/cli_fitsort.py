@@ -53,10 +53,15 @@ def main() -> int:
         return 0
 
     sep = args.separator
-    print(sep.join(header))
+    rows = [header]
     for name, cards in records:
-        row = [name] + [cards.get(k, args.missing) for k in keywords]
-        print(sep.join(row))
+        rows.append([name] + [cards.get(k, args.missing) for k in keywords])
+    widths = [max(len(r[i]) for r in rows) for i in range(len(header))]
+    for row in rows:
+        padded = [cell.ljust(widths[i]) for i, cell in enumerate(row)]
+        # strip trailing whitespace on last column
+        padded[-1] = padded[-1].rstrip()
+        print(sep.join(padded))
 
     return 0
 

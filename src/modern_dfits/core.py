@@ -11,7 +11,8 @@ START_PREFIX = "====>"
 
 
 def _header_lines(path: Path, hdu_index: int, header: fits.Header) -> list[str]:
-    lines = [f"{START_PREFIX} {path}[{hdu_index}]"]
+    suffix = f"[{hdu_index}]" if hdu_index != 0 else ""
+    lines = [f"{START_PREFIX} {path}{suffix}"]
     for card in header.cards:
         # Keep formatting compact and stable for downstream parsing.
         key = (card.keyword or "").strip()

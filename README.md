@@ -20,30 +20,20 @@ Requirements:
 - Python 3.10 or newer
 - `pip`
 
-On macOS with Homebrew Python, `python3 -m pip install ...` may fail with `externally-managed-environment` (PEP 668). Use a dedicated environment instead of the system Python.
+On macOS with Homebrew Python, `python3 -m pip install ...` may fail with `externally-managed-environment` (PEP 668). Install into an active conda environment instead:
 
-Recommended: install in a conda environment:
+```bash
+conda activate <your-env>
+pip install git+https://github.com/eartigau/fitstools.git
+```
+
+If you don't have a conda environment yet:
 
 ```bash
 conda create -n fitstools python=3.12
 conda activate fitstools
-python -m pip install git+https://github.com/eartigau/fitstools.git
+pip install git+https://github.com/eartigau/fitstools.git
 ```
-
-If you prefer installing the command-line tools without managing an environment manually, use `pipx`:
-
-```bash
-brew install pipx
-pipx install git+https://github.com/eartigau/fitstools.git
-```
-
-Install directly from GitHub:
-
-```bash
-python -m pip install git+https://github.com/eartigau/fitstools.git
-```
-
-The command above assumes you already activated a virtual environment or conda environment.
 
 Install from a local clone:
 

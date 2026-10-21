@@ -64,13 +64,16 @@ fitsort --help
 
 ```bash
 dfits file1.fits file2.fits
-dfits -x file.fits
+dfits -x file.fits          # all HDUs
+dfits -x 1 *.fits           # extension 1 only
+dfits -x FluxA *.fits       # extension by EXTNAME (case-insensitive)
+dfits -x FluxA *.fits | fitsort NAXIS1 NAXIS2
 ```
 
 Options:
 
-- `-x`, `--extensions`: include extension-level headers (all HDUs). Default behavior prints only primary header (HDU 0).
-- `-n`, `--no-primary`: when `--extensions` is set, skip primary header and print only extension headers.
+- `-x [EXT]`, `--extensions [EXT]`: include extension-level headers. Without a value (or with `0`, as in ESO `dfits`), print all HDUs; with an integer index or an `EXTNAME`, print only that HDU. Files lacking the requested extension are skipped with a warning on stderr. Default behavior prints only primary header (HDU 0).
+- `-n`, `--no-primary`: when printing all HDUs, skip primary header and print only extension headers.
 
 ### `fitsort`
 

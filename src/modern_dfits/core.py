@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 from collections import OrderedDict
 from pathlib import Path
 from typing import Iterable
@@ -41,16 +42,51 @@ def _value_to_text(value: object) -> str:
     return str(value)
 
 
-def dfits_lines(files: Iterable[str], include_extensions: bool, no_primary: bool) -> list[str]:
+ALL_EXTENSIONS = "all"
+
+
+def _select_hdus(hdul: fits.HDUList, extension: str | None, no_primary: bool) -> list[int]:
+    if extension is None:
+        return [0]
+
+    # As in ESO dfits, `-x 0` means every HDU.
+    if extension in (ALL_EXTENSIONS, "0"):
+        start = 1 if no_primary else 0
+        return list(range(start, len(hdul)))
+
+    if extension.isdigit():
+        index = int(extension)
+        if index >= len(hdul):
+            raise KeyError(f"no extension {index} (file has {len(hdul)} HDUs)")
+        return [index]
+
+    # EXTNAME lookup is case-insensitive in astropy.
+    try:
+        return [hdul.index_of(extension)]
+    except KeyError:
+        raise KeyError(f"no extension named {extension!r}") from None
+
+
+def dfits_lines(
+    files: Iterable[str],
+    extension: str | None = None,
+    no_primary: bool = False,
+) -> list[str]:
+    """Header lines for each file.
+
+    extension: None for the primary header only, "all" (or "0") for every
+    HDU, otherwise one HDU given by its index or its EXTNAME. Files lacking
+    the requested extension are skipped with a warning on stderr.
+    """
     output: list[str] = []
     for file_name in files:
         path = Path(file_name)
         with fits.open(path, memmap=True) as hdul:
-            if include_extensions:
-                start = 1 if no_primary else 0
-                indices = range(start, len(hdul))
-            else:
-                indices = [0]
+            try:
+                indices = _select_hdus(hdul, extension, no_primary)
+            except KeyError as exc:
+                print(f"dfits: warning: {path}: {exc.args[0]}, skipped", file=sys.stderr)
+                continue
 
             for hdu_index in indices:
                 output.extend(_header_lines(path, hdu_index, hdul[hdu_index].header))
